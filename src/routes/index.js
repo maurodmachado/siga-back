@@ -9,6 +9,9 @@ router.get("/health", (req, res) => {
     });
 });
  
+router.use("/api/health", (req, res) => {
+    return res.status(200).json({ msg: "Server working OK" });   
+})
 // routes
 router.use("/api/autoridades", require("./api/autoridades"));
 router.use("/api/personas", require("./api/personas"));
