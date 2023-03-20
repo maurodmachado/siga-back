@@ -2,6 +2,8 @@
 const config = require("config");
 const mongoose = require("mongoose");
 var colors = require('colors/safe');
+const bcryptjs = require("bcryptjs");
+
 // Importamos el modelo
 const Alumno = require("../models/Alumno");
 const Archivo = require("../models/Archivo");
@@ -21,36 +23,37 @@ const Representante = require("../models/Representante");
 const Usuario = require("../models/Usuario");
 
 (async () => {
-  await mongoose.connect(config.get("db_atlas_dev"));
+  const connect = mongoose.connect(config.get("db_atlas_dev"));
+  await Promise.all([connect]);
   const db = mongoose.createConnection(config.get("db_atlas_dev"));
 
   // Borramos la coleccion
-  // console.log(colors.green("Iniciando Delete de colecciones"));
-  // await db.collection("alumnos").deleteMany();
-  // console.log(".");
-  // await db.collection("asignaturas").deleteMany();
-  // console.log("..");
-  // await db.collection("autoridades").deleteMany();
-  // console.log("...");
-  // await db.collection("autoridadtypes").deleteMany();
-  // console.log("....");
-  // await db.collection("calificacions").deleteMany();
-  // console.log(".....");
-  // await db.collection("cursos").deleteMany();
-  // console.log("......");
-  // await db.collection("escuelas").deleteMany();
-  // console.log(".......");
-  // await db.collection("eventos").deleteMany();
-  // console.log("........");
-  // await db.collection("inasistencias").deleteMany();
-  // console.log(".........");
-  // await db.collection("legajos").deleteMany();
-  // console.log("..........");
-  // await db.collection("listadocalificaciones").deleteMany();
-  // console.log("...........");
-  // await db.collection("personas").deleteMany();
-  // console.log("............");
-  // await db.collection("usuarios").deleteMany();
+  console.log(colors.green("Iniciando Delete de colecciones"));
+  await db.collection("alumnos").deleteMany();
+  console.log(".");
+  await db.collection("asignaturas").deleteMany();
+  console.log("..");
+  await db.collection("autoridades").deleteMany();
+  console.log("...");
+  await db.collection("autoridadtypes").deleteMany();
+  console.log("....");
+  await db.collection("calificacions").deleteMany();
+  console.log(".....");
+  await db.collection("cursos").deleteMany();
+  console.log("......");
+  await db.collection("escuelas").deleteMany();
+  console.log(".......");
+  await db.collection("eventos").deleteMany();
+  console.log("........");
+  await db.collection("inasistencias").deleteMany();
+  console.log(".........");
+  await db.collection("legajos").deleteMany();
+  console.log("..........");
+  await db.collection("listadocalificaciones").deleteMany();
+  console.log("...........");
+  await db.collection("personas").deleteMany();
+  console.log("............");
+  await db.collection("usuarios").deleteMany();
   console.log(".............");
   console.log(colors.green("Finalizando Delete de colecciones"));
 
@@ -60,7 +63,7 @@ const Usuario = require("../models/Usuario");
   const escuelaEnet = await Escuela({
     nombre: "E.N.E.T N° 1",
     telefono: "38344423303",
-    localidad: "capital",
+    localidad: "Capital",
     codigoPostal: "4700",
     barrio: "25 de septiembre",
     calle: "Mariano Moreno Nte.",
@@ -70,7 +73,7 @@ const Usuario = require("../models/Usuario");
   const escuelaFray = await Escuela({
     nombre: "Fray Mamerto Esquiú",
     telefono: "38344428009",
-    localidad: "capital",
+    localidad: "Capital",
     codigoPostal: "4700",
     barrio: "25 de agosto",
     calle: "Av. Belgrano",
@@ -78,7 +81,7 @@ const Usuario = require("../models/Usuario");
   }).save();
 
   console.log(colors.cyan("Tipos de autoridades"));
-  await AutoridadType({
+  const autoridadAdminType = await AutoridadType({
     tipoAutoridad: "Administrador",
     permisos: ["superuser"],
   }).save();
@@ -93,7 +96,7 @@ const Usuario = require("../models/Usuario");
     permisos: ["lst-inasistenci"],
   }).save();
 
-  await AutoridadType({
+  const autoridadTutorType = await AutoridadType({
     tipoAutoridad: "Tutor",
     permisos: ["lst-inasistenci"],
   }).save();
@@ -114,9 +117,9 @@ const Usuario = require("../models/Usuario");
     domicilioCalle: "domicilio preceptor",
     domicilioNumeroCalle: 4444,
     domicilioPiso: 4,
-    domicilioCepartamento: "A",
+    domicilioDepartamento: "A",
     ocupacion: "Preceptor",
-    domicilioLaboralLocalidad: "capital",
+    domicilioLaboralLocalidad: "Capital",
     domicilioLaboralCodigoPostal: 4700,
     domicilioLaboralBarrio: "25 de septiembre",
     domicilioLaboralCalle: "Av. Belgrano",
@@ -126,7 +129,8 @@ const Usuario = require("../models/Usuario");
     contactoTelefono: "1500000002",
     contactoTelefonoSec: "1500000001",
     contactoCorreo: "preceptor@dominio.com"
-  });
+  }).save();
+
 
   const personaPreceptor1 = await Persona({
     nombres: "Federico",
@@ -143,9 +147,9 @@ const Usuario = require("../models/Usuario");
     domicilioCalle: "domicilio preceptor",
     domicilioNumeroCalle: 3333,
     domicilioPiso: 4,
-    domicilioCepartamento: "A",
+    domicilioDepartamento: "A",
     ocupacion: "Preceptor",
-    domicilioLaboralLocalidad: "capital",
+    domicilioLaboralLocalidad: "Capital",
     domicilioLaboralCodigoPostal: 4700,
     domicilioLaboralBarrio: "25 de septiembre",
     domicilioLaboralCalle: "Av. Belgrano",
@@ -155,11 +159,11 @@ const Usuario = require("../models/Usuario");
     contactoTelefono: "1500000004",
     contactoTelefonoSec: "1500000003",
     contactoCorreo: "preceptor@dominio.com"
-  });
+  }).save();
 
   const personaProfesor = await Persona({
-    nombres: "Martin el changuito",
-    apellidos: "Hidalgo",
+    nombres: "Gonzalo",
+    apellidos: "Soria",
     numeroDocumento: "11111111",
     tipoDocumento: "DNI",
     genero: "Masculino",
@@ -168,13 +172,13 @@ const Usuario = require("../models/Usuario");
     fechaNacimiento: "1982-10-19T16:36:14.197Z",
     domicilioLocalidad: "San Fernando del Valle de Catamarca",
     domicilioCodigoPostal: 4700,
-    domicilioBarrio: "barrio preceptor",
-    domicilioCalle: "domicilio preceptor",
+    domicilioBarrio: "barrio profesor",
+    domicilioCalle: "domicilio profesor",
     domicilioNumeroCalle: 5555,
     domicilioPiso: 3,
-    domicilioCepartamento: "Z",
-    ocupacion: "Preceptor",
-    domicilioLaboralLocalidad: "capital",
+    domicilioDepartamento: "Z",
+    ocupacion: "Profesor",
+    domicilioLaboralLocalidad: "Capital",
     domicilioLaboralCodigoPostal: 4700,
     domicilioLaboralBarrio: "25 de septiembre",
     domicilioLaboralCalle: "Av. Belgrano",
@@ -183,37 +187,66 @@ const Usuario = require("../models/Usuario");
     domicilioLaboralDepartamento: null,
     contactoTelefono: "1511111112",
     contactoTelefonoSec: "1511111111",
-    contactoCorreo: "preceptor2@dominio.com"
-  });
+    contactoCorreo: "profesor@dominio.com"
+  }).save();
 
   const personaProfesor1 = await Persona({
-    nombres: "Martin el changuito",
-    apellidos: "Hidalgo",
-    numeroDocumento: "11111111",
+    nombres: "Florencia",
+    apellidos: "Vergesio",
+    numeroDocumento: "11111112",
     tipoDocumento: "DNI",
-    genero: "Masculino",
+    genero: "Femenino",
     grupoFactor: "B+",
     nacionalidad: "AR",
     fechaNacimiento: "1982-10-19T16:36:14.197Z",
     domicilioLocalidad: "San Fernando del Valle de Catamarca",
     domicilioCodigoPostal: 4700,
-    domicilioBarrio: "barrio preceptor",
-    domicilioCalle: "domicilio preceptor",
+    domicilioBarrio: "barrio profesor",
+    domicilioCalle: "domicilio profesor",
     domicilioNumeroCalle: 5555,
     domicilioPiso: 3,
-    domicilioCepartamento: "Z",
-    ocupacion: "Preceptor",
-    domicilioLaboralLocalidad: "capital",
+    domicilioDepartamento: "Z",
+    ocupacion: "Profesor",
+    domicilioLaboralLocalidad: "Capital",
     domicilioLaboralCodigoPostal: 4700,
     domicilioLaboralBarrio: "25 de septiembre",
     domicilioLaboralCalle: "Av. Belgrano",
     domicilioLaboralNumeroCalle: 599,
     domicilioLaboralPiso: null,
     domicilioLaboralDepartamento: null,
-    contactoTelefono: "1511111112",
-    contactoTelefonoSec: "1511111111",
-    contactoCorreo: "preceptor2@dominio.com"
-  });
+    contactoTelefono: "1511111114",
+    contactoTelefonoSec: "1511111113",
+    contactoCorreo: "profesor1@dominio.com"
+  }).save();
+
+  const personaAdmin = await Persona({
+    nombres: "Administrador",
+    apellidos: "Siga",
+    numeroDocumento: "99999991",
+    tipoDocumento: "DNI",
+    genero: "Masculino",
+    grupoFactor: "0+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1982-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "barrio profesor",
+    domicilioCalle: null,
+    domicilioNumeroCalle: null,
+    domicilioPiso: null,
+    domicilioDepartamento: null,
+    ocupacion: "Administrador",
+    domicilioLaboralLocalidad: null,
+    domicilioLaboralCodigoPostal: null, 
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: null,
+    domicilioLaboralNumeroCalle: null,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "03834896574",
+    contactoTelefonoSec: null,
+    contactoCorreo: "administrador@dominio.com"
+  }).save();
 
   console.log(colors.cyan("Autoridad - Preceptores"));
   const autoridadPreceptor = await Autoridad({
@@ -234,21 +267,29 @@ const Usuario = require("../models/Usuario");
 
   console.log(colors.cyan("Autoridad - Profesores"));
   const autoridadProfesor = await Autoridad({
-    tipoAutoridad: autoridadProfesorType._id,
+    tipo: autoridadProfesorType._id,
     escuela: escuelaFray._id,
     personaRelacionada: null,
     persona: personaProfesor._id,
     cursos: []
   }).save();
-
- const autoridadProfesor1 =  await Autoridad({
-    tipoAutoridad: autoridadProfesorType._id,
+  
+  const autoridadProfesor1 =  await Autoridad({
+    tipo: autoridadProfesorType._id,
     escuela: escuelaFray._id,
     personaRelacionada: null,
     persona: personaProfesor1._id,
     cursos: []
   }).save();
   
+  console.log(colors.cyan("Autoridad - Administrador"));
+  const autoridadAdmin = await Autoridad({
+    tipo: autoridadAdminType._id,
+    escuela: escuelaFray._id,
+    personaRelacionada: null,
+    persona: personaAdmin._id,
+    cursos: []
+  }).save();
   console.log(colors.cyan("Cursos"));
   const curso1A = await Curso({
     escuela: escuelaFray._id,
@@ -333,7 +374,7 @@ const Usuario = require("../models/Usuario");
   
   console.log(colors.cyan("Asignaturas"));
 
-  const arrayNombreMaterias = ["Matematica", "Lengua", "Cs Sociales", "Cs Naturales"];
+  const arrayNombreMaterias = ["Matematica", "Lengua"];
 
   const arrayCursosProfesor = [ 
     {profesor:autoridadProfesor ,curso:curso1A},
@@ -344,9 +385,9 @@ const Usuario = require("../models/Usuario");
     {profesor:autoridadProfesor1 ,curso:curso2B},
     {profesor:autoridadProfesor1 ,curso:curso2C},
     {profesor:autoridadProfesor1 ,curso:curso2D},
-   ];
+  ];
 
-   for (let index = 0; index < arrayNombreMaterias.length; index++) {
+  for (let index = 0; index < arrayNombreMaterias.length; index++) {
     // nombre de la materia
     const materia = arrayNombreMaterias[index];
     // sagundo array
@@ -361,22 +402,654 @@ const Usuario = require("../models/Usuario");
         profesor: profesor._id 
       }).save();
     }
-   }
+  }
  
+
+
+  console.log(colors.cyan("Persona - Alumno"));
+  const personaAlumno = await Persona({
+    nombres: "Santé",
+    apellidos: "Barbieri",
+    numeroDocumento: "2222220",
+    tipoDocumento: "DNI",
+    genero: "Masculino",
+    grupoFactor: "A+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1992-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "Piedra blanca",
+    domicilioCalle: "Ruta N°2",
+    domicilioNumeroCalle: 505,
+    domicilioPiso: 0,
+    domicilioDepartamento: null,
+    ocupacion: null,
+    domicilioLaboralLocalidad: null,
+    domicilioLaboralCodigoPostal: null,
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: null,
+    domicilioLaboralNumeroCalle: null,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "03834020203",
+    contactoTelefonoSec: '03834020203',
+    contactoCorreo: "alumno@siga.unca.com"
+  }).save();
   
+    const personaAlumno1 = await Persona({
+    nombres: "Jose",
+    apellidos: "Barbieri",
+    numeroDocumento: "2222221",
+    tipoDocumento: "DNI",
+    genero: "Masculino",
+    grupoFactor: "A+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1991-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "Piedra blanca",
+    domicilioCalle: "Ruta N°2",
+    domicilioNumeroCalle: 505,
+    domicilioPiso: 0,
+    domicilioDepartamento: null,
+    ocupacion: null,
+    domicilioLaboralLocalidad: null,
+    domicilioLaboralCodigoPostal: null,
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: null,
+    domicilioLaboralNumeroCalle: null,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "3834534454",
+    contactoTelefonoSec: null,
+    contactoCorreo: "alumno1@siga.unca.com"
+    }).save();
+  
+  const personaAlumno2 = await Persona({
+    nombres: "Julio",
+    apellidos: "Barbieri",
+    numeroDocumento: "2222222",
+    tipoDocumento: "DNI",
+    genero: "Masculino",
+    grupoFactor: "A+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1991-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "Piedra blanca",
+    domicilioCalle: "Ruta N°2",
+    domicilioNumeroCalle: 505,
+    domicilioPiso: 0,
+    domicilioDepartamento: null,
+    ocupacion: null,
+    domicilioLaboralLocalidad: null,
+    domicilioLaboralCodigoPostal: null,
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: null,
+    domicilioLaboralNumeroCalle: null,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "03834028856",
+    contactoTelefonoSec: null,
+    contactoCorreo: "alumno2@siga.unca.com"
+  }).save();
+
+  const personaAlumno3 = await Persona({
+    nombres: "Noelia",
+    apellidos: "Sosa",
+    numeroDocumento: "2222223",
+    tipoDocumento: "DNI",
+    genero: "Femenino",
+    grupoFactor: "A+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1994-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "Barrio las flores",
+    domicilioCalle: "Av. Virgen del valle",
+    domicilioNumeroCalle: 2076,
+    domicilioPiso: 0,
+    domicilioDepartamento: null,
+    ocupacion: null,
+    domicilioLaboralLocalidad: null,
+    domicilioLaboralCodigoPostal: null,
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: null,
+    domicilioLaboralNumeroCalle: null,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "0383402214",
+    contactoTelefonoSec: null,
+    contactoCorreo: "alumno3@siga.unca.com"
+  }).save();
+
+  const personaAlumno4 = await Persona({
+    nombres: "Nicolas",
+    apellidos: "Sosa",
+    numeroDocumento: "2222224",
+    tipoDocumento: "DNI",
+    genero: "Masculino",
+    grupoFactor: "A+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1994-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "Parque chacabuco",
+    domicilioCalle: "Presidente castillo",
+    domicilioNumeroCalle: 25,
+    domicilioPiso: 0,
+    domicilioDepartamento: null,
+    ocupacion: null,
+    domicilioLaboralLocalidad: null,
+    domicilioLaboralCodigoPostal: null,
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: null,
+    domicilioLaboralNumeroCalle: null,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "0383404298",
+    contactoTelefonoSec: null,
+    contactoCorreo: "alumno4@siga.unca.com"
+  }).save();
+
+  const personaAlumno5 = await Persona({
+    nombres: "Ruth",
+    apellidos: "Varela",
+    numeroDocumento: "2222225",
+    tipoDocumento: "DNI",
+    genero: "Masculino",
+    grupoFactor: "A+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1994-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "La tablada",
+    domicilioCalle: "Av. guemes",
+    domicilioNumeroCalle: 250,
+    domicilioPiso: 0,
+    domicilioDepartamento: null,
+    ocupacion: null,
+    domicilioLaboralLocalidad: null,
+    domicilioLaboralCodigoPostal: null,
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: null,
+    domicilioLaboralNumeroCalle: null,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "0383404154",
+    contactoTelefonoSec: null,
+    contactoCorreo: "alumno5@siga.unca.com"
+  }).save();
+
+  const personaAlumno6 = await Persona({
+    nombres: "Abel",
+    apellidos: "Varela",
+    numeroDocumento: "2222226",
+    tipoDocumento: "DNI",
+    genero: "Masculino",
+    grupoFactor: "A+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1994-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "La tablada",
+    domicilioCalle: "Salta",
+    domicilioNumeroCalle: 10,
+    domicilioPiso: 0,
+    domicilioDepartamento: null,
+    ocupacion: null,
+    domicilioLaboralLocalidad: null,
+    domicilioLaboralCodigoPostal: null,
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: null,
+    domicilioLaboralNumeroCalle: null,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "0383404153",
+    contactoTelefonoSec: null,
+    contactoCorreo: "alumno6@siga.unca.com"
+  }).save();
+  
+  const personaAlumno7 = await Persona({
+    nombres: "Jose",
+    apellidos: "Toloza",
+    numeroDocumento: "2222227",
+    tipoDocumento: "DNI",
+    genero: "Masculino",
+    grupoFactor: "A+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1994-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "Parque norte",
+    domicilioCalle: "Maipu Norte",
+    domicilioNumeroCalle: 33,
+    domicilioPiso: 0,
+    domicilioDepartamento: null,
+    ocupacion: null,
+    domicilioLaboralLocalidad: null,
+    domicilioLaboralCodigoPostal: null,
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: null,
+    domicilioLaboralNumeroCalle: null,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "0383404132",
+    contactoTelefonoSec: null,
+    contactoCorreo: "alumno7@siga.unca.com"
+  }).save();
+
+  console.log(colors.cyan("Persona - Madre"));
+  const personaMadre = await Persona({
+    nombres: "Valeria",
+    apellidos: "Mercado",
+    numeroDocumento: "3333330",
+    tipoDocumento: "DNI",
+    genero: "Femenino",
+    grupoFactor: "A+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1972-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "Alem",
+    domicilioCalle: "Av. Alem", 
+    domicilioNumeroCalle: 5555,
+    domicilioPiso: 3,
+    domicilioDepartamento: "Z",
+    ocupacion: "Lic. Informatica",
+    domicilioLaboralLocalidad: "Capital",
+    domicilioLaboralCodigoPostal: 4700,
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: "Av. Belgrano",
+    domicilioLaboralNumeroCalle: 599,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "3834662254",
+    contactoTelefonoSec: "3834554548",
+    contactoCorreo: "madre@dominio.com"
+  }).save();
+
+  const personaMadre1 = await Persona({
+    nombres: "Natalia",
+    apellidos: "Medina",
+    numeroDocumento: "3333331",
+    tipoDocumento: "DNI",
+    genero: "Femenino",
+    grupoFactor: "A+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1969-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "Parque chacabuco",
+    domicilioCalle: "Presidente castillo",
+    domicilioNumeroCalle: 25,
+    domicilioPiso: 0,
+    domicilioDepartamento: null,
+    ocupacion: "Maestra Jardinera",
+    domicilioLaboralLocalidad: "Capital",
+    domicilioLaboralCodigoPostal: 4700,
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: "Esquiu",
+    domicilioLaboralNumeroCalle: 345,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "1511111114",
+    contactoTelefonoSec: "1511111113",
+    contactoCorreo: "madre1@dominio.com"
+  }).save();
+
+  const personaMadre2 = await Persona({
+    nombres: "Lucia",
+    apellidos: "Camps",
+    numeroDocumento: "3333332",
+    tipoDocumento: "DNI",
+    genero: "Femenino",
+    grupoFactor: "A+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1969-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "Parque chacabuco",
+    domicilioCalle: "Presidente castillo",
+    domicilioNumeroCalle: 25,
+    domicilioPiso: 0,
+    domicilioDepartamento: null,
+    ocupacion: "Abogada",
+    domicilioLaboralLocalidad: "Capital",
+    domicilioLaboralCodigoPostal: 4700,
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: "Salta",
+    domicilioLaboralNumeroCalle: 23,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "3834564564",
+    contactoTelefonoSec: null,
+    contactoCorreo: "madre2@dominio.com"
+  }).save();
+
+  const personaMadre3 = await Persona({
+    nombres: "Luciana",
+    apellidos: "Iraola",
+    numeroDocumento: "3333333",
+    tipoDocumento: "DNI",
+    genero: "Femenino",
+    grupoFactor: "A+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1969-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "Parque chacabuco",
+    domicilioCalle: "Presidente castillo",
+    domicilioNumeroCalle: 25,
+    domicilioPiso: 0,
+    domicilioDepartamento: null,
+    ocupacion: "Empleada pública",
+    domicilioLaboralLocalidad: "Capital",
+    domicilioLaboralCodigoPostal: 4700,
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: "Republica",
+    domicilioLaboralNumeroCalle: 456,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "1511111114",
+    contactoTelefonoSec: "1511111113",
+    contactoCorreo: "madre3@dominio.com"
+  }).save();
+
+  console.log(colors.cyan("Persona - Padre"));
+  const personaPadre = await Persona({
+    nombres: "Pepino",
+    apellidos: "Barbieri",
+    numeroDocumento: "4444440",
+    tipoDocumento: "DNI",
+    genero: "Masculino",
+    grupoFactor: "B+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1972-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "Alem",
+    domicilioCalle: "Av. Alemn",
+    domicilioNumeroCalle: 5555,
+    domicilioPiso: 3,
+    domicilioDepartamento: "Z",
+    ocupacion: "Lic. Informatica",
+    domicilioLaboralLocalidad: "Capital",
+    domicilioLaboralCodigoPostal: 4700,
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: "Esquiu",
+    domicilioLaboralNumeroCalle: 342,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "3834659585",
+    contactoTelefonoSec: "3834655655",
+    contactoCorreo: "padre@dominio.com"
+  }).save();
+    
+  const personaPadre1 = await Persona({
+    nombres: "Jose",
+    apellidos: "Sosa",
+    numeroDocumento: "4444441",
+    tipoDocumento: "DNI",
+    genero: "Masculino",
+    grupoFactor: "B+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1972-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "Alem",
+    domicilioCalle: "Av. Alem",
+    domicilioNumeroCalle: 5555,
+    domicilioPiso: 3,
+    domicilioDepartamento: "Z",
+    ocupacion: "Lic. Informatica",
+    domicilioLaboralLocalidad: "Capital",
+    domicilioLaboralCodigoPostal: 4700,
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: "Chacabuco",
+    domicilioLaboralNumeroCalle: 599,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "1511111115",
+    contactoTelefonoSec: "1511111114",
+    contactoCorreo: "padre1@dominio.com"
+  }).save();
+  
+  const personaPadre2 = await Persona({
+    nombres: "Lucas",
+    apellidos: "Varela",
+    numeroDocumento: "4444442",
+    tipoDocumento: "DNI",
+    genero: "Masculino",
+    grupoFactor: "B+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1972-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "Alem",
+    domicilioCalle: "Av. Alemn",
+    domicilioNumeroCalle: 5555,
+    domicilioPiso: 3,
+    domicilioDepartamento: "Z",
+    ocupacion: "Lic. Informatica",
+    domicilioLaboralLocalidad: "Capital",
+    domicilioLaboralCodigoPostal: 4700,
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: "Av. Belgrano",
+    domicilioLaboralNumeroCalle: 599,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "1511111115",
+    contactoTelefonoSec: "1511111114",
+    contactoCorreo: "padre2@dominio.com"
+  }).save();
+  
+  const personaPadre3 = await Persona({
+    nombres: "Dario",
+    apellidos: "Toloza",
+    numeroDocumento: "4444443",
+    tipoDocumento: "DNI",
+    genero: "Masculino",
+    grupoFactor: "B+",
+    nacionalidad: "AR",
+    fechaNacimiento: "1972-10-19T16:36:14.197Z",
+    domicilioLocalidad: "San Fernando del Valle de Catamarca",
+    domicilioCodigoPostal: 4700,
+    domicilioBarrio: "Alem",
+    domicilioCalle: "Av. Alemn",
+    domicilioNumeroCalle: 5555,
+    domicilioPiso: 3,
+    domicilioDepartamento: "Z",
+    ocupacion: "Lic. Informatica",
+    domicilioLaboralLocalidad: "Capital",
+    domicilioLaboralCodigoPostal: 4700,
+    domicilioLaboralBarrio: null,
+    domicilioLaboralCalle: "Av. Belgrano",
+    domicilioLaboralNumeroCalle: 599,
+    domicilioLaboralPiso: null,
+    domicilioLaboralDepartamento: null,
+    contactoTelefono: "1511111115",
+    contactoTelefonoSec: "1511111114",
+    contactoCorreo: "padre3@dominio.com"
+  }).save();
+
+  console.log(colors.cyan("Alumnos"));
+  const alumno = await Alumno({ persona: personaAlumno._id }).save();
+  const alumno1 = await Alumno({ persona: personaAlumno1._id }).save();
+  const alumno2 = await Alumno({ persona: personaAlumno2._id }).save();
+  const alumno3 = await Alumno({ persona: personaAlumno3._id }).save();
+  const alumno4 = await Alumno({ persona: personaAlumno4._id }).save();
+  const alumno5 = await Alumno({ persona: personaAlumno5._id }).save();
+  const alumno6 = await Alumno({ persona: personaAlumno6._id }).save();
+  const alumno7 = await Alumno({ persona: personaAlumno7._id }).save();
+
+  console.log(colors.cyan("Tutores"));
+
+  const autoridadTutor = await Autoridad({
+      persona: personaPadre._id,
+      tipo: autoridadTutorType._id,
+      alumnos: [alumno._id, alumno1._id, alumno2._id],
+      cursos: [],
+      escuela: escuelaFray._id,
+    }).save();
+
+    const autoridadTutor1 = await Autoridad({
+      persona: personaMadre1._id,
+      tipo: autoridadTutorType._id,
+      alumnos: [alumno3._id, alumno4._id, ],
+      cursos: [],
+      escuela: escuelaFray._id,
+    }).save();
+    
+    const autoridadTutor2 = await Autoridad({
+      persona: personaMadre2._id,
+      tipo: autoridadTutorType._id,
+      alumnos: [alumno5._id, alumno6._id],
+      cursos: [],
+      escuela: escuelaFray._id,
+    }).save();
+
+    const autoridadTutor3 = await Autoridad({
+      persona: personaMadre3._id,
+      tipo: autoridadTutorType._id,
+      alumnos: [alumno7._id],
+      cursos: [],
+      escuela: escuelaFray._id,
+    }).save();
+  
+
+console.log(colors.cyan("Legajos"));
+await Legajo({
+  alumno: alumno._id,
+  padre: personaPadre._id,
+  madre: personaMadre._id,
+  tutor: autoridadTutor._id,
+  archivado: false,
+  curso: curso1A._id,
+}).save()
+
+await Legajo({
+  alumno: alumno1._id,
+  padre: personaPadre._id,
+  madre: personaMadre._id,
+  tutor: autoridadTutor._id,
+  archivado: false,
+  curso: curso2A._id,
+}).save()
+
+await Legajo({
+  alumno: alumno2._id,
+  padre: personaPadre._id,
+  madre: personaMadre._id,
+  tutor: autoridadTutor._id,
+  archivado: false,
+  curso: curso2C._id,
+}).save()
+
+await Legajo({
+  alumno: alumno3._id,
+  padre: personaPadre1._id,
+  madre: personaMadre1._id,
+  tutor: autoridadTutor1._id,
+  archivado: false,
+  curso: curso1A._id,
+}).save()
+
+await Legajo({
+  alumno: alumno4._id,
+  padre: personaPadre1._id,
+  madre: personaMadre1._id,
+  tutor: autoridadTutor1._id,
+  archivado: false,
+  curso: curso2A._id,
+}).save()
+
+await Legajo({
+  alumno: alumno5._id,
+  padre: personaPadre2._id,
+  madre: personaMadre2._id,
+  tutor: autoridadTutor2._id,
+  archivado: false,
+  curso: curso2C._id,
+}).save()
+
+await Legajo({
+  alumno: alumno6._id,
+  padre: personaPadre2._id,
+  madre: personaMadre2._id,
+  tutor: autoridadTutor2._id,
+  archivado: false,
+  curso: curso1A._id,
+}).save()
+
+await Legajo({
+  alumno: alumno7._id,
+  padre: personaPadre3._id,
+  madre: personaMadre3._id,
+  tutor: autoridadTutor3._id,
+  archivado: false,
+  curso: curso1A._id,
+}).save()
+  
+  // generamos salt
+  const salt = await bcryptjs.genSalt(10);
+  
+  console.log(colors.cyan("Usuarios- Preceptores"));
+  await Usuario({
+    usuario: "roromero",
+    password: await bcryptjs.hash("roromero", salt),
+    autoridad: autoridadPreceptor._id,
+  }).save()
+  await Usuario({
+    usuario: "femartinez",
+    password: await bcryptjs.hash("femartinez", salt),
+    autoridad: autoridadPreceptor1._id,
+  }).save()
+
+  console.log(colors.cyan("Usuarios- Profesores"));
+  await Usuario({
+    usuario: "gosoria",
+    password: await bcryptjs.hash("gosoria", salt),
+    autoridad: autoridadProfesor._id,
+  }).save()
+  await Usuario({
+    usuario: "flovergesio",
+    password: await bcryptjs.hash("flovergesio", salt),
+    autoridad: autoridadProfesor1._id,
+  }).save()
+
+  console.log(colors.cyan("Usuarios- Tutores"));
+  await Usuario({
+    usuario: "pebarbieri",
+    password: await bcryptjs.hash("pebarbieri", salt),
+    autoridad: autoridadTutor._id,
+  }).save()
+  await Usuario({
+    usuario: "namedina",
+    password: await bcryptjs.hash("namedina", salt),
+    autoridad: autoridadTutor1._id,
+  }).save()
+  await Usuario({
+    usuario: "lucamps",
+    password: await bcryptjs.hash("lucamps", salt),
+    autoridad: autoridadTutor2._id,
+  }).save()
+  await Usuario({
+    usuario: "luiraola",
+    password: await bcryptjs.hash("luiraola", salt),
+    autoridad: autoridadTutor3._id,
+  }).save()
+
+  console.log(colors.cyan("Usuario- Administrador"));
+  await Usuario({
+    usuario: "admin",
+    password: await bcryptjs.hash("admin", salt),
+    autoridad: autoridadAdmin._id,
+  }).save()
+
   // salimos del script 20 segundos despues de haber insertado los documentos
   setTimeout(function () {
     console.log(colors.red("Proceso Terminado"));
     return process.exit(1);
   }, 2000);
 })();
-
-
-
-const crearAsignaturaPorCurso = async ({asignatura,curso, profesor}) => {
-  return await Asignatura({
-    nombre: asignatura,
-    curso: curso._id,
-    profesor: profesor._id 
-}).save();
-}

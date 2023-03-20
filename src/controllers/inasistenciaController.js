@@ -11,7 +11,7 @@ exports.crearInasistencia = async (req, res) => {
   let inasistenciasCreadas = [];
   arrayInasistencias.map(async (inasistencia, index) => {
     
-  const { alumnoId, valor, estado } = inasistencia;
+  const { alumnoId, valor, estado, curso } = inasistencia;
     try {
       let alumno = await Alumno.findById(alumnoId);
       if (!alumno) {
@@ -25,7 +25,7 @@ exports.crearInasistencia = async (req, res) => {
       if(inasistExist.length !== 0){
         return res.status(200).json(inasistExist);
       }
-      let inasistencia = new Inasistencia({alumno: alumnoId, valor, estado, curso: alumno.curso});
+      let inasistencia = new Inasistencia({alumno: alumnoId, valor, estado, curso});
       const inasistenciaCreada = await inasistencia.save();
       inasistenciasCreadas.push(inasistenciaCreada)
       if(arrayInasistencias.length - 1 === index){
@@ -144,8 +144,7 @@ exports.obtenerInasistenciasDiariasByCurso = async (req, res) => {
 exports.obtenerInasistenciasDiariasByAlumno = async (req, res) => {
   try {
     const today = (new Date).toLocaleDateString();
-    // let inasistExist = await Inasistencia.find({alumno:  req.params.id, fecha: today});
-    // console.log(inasistExist)
+
     let inasistencias = await Inasistencia.find({alumno: req.params.id, fecha: today }).populate({
       path: 'alumno',
       populate: { path: 'persona' }

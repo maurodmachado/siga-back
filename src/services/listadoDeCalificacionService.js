@@ -6,6 +6,7 @@ const calificacionesServices = require("../services/calificacionService");
 const asignaturaServices = require("../services/asignaturaService");
 const { SystemConfig } = require("../config/system");
 const { ordenamientoDescendente } = require("../utils/utilities");
+const Calificacion = require("../models/Calificacion");
 
 /**
  * Crear listado calificaciones
@@ -89,6 +90,7 @@ exports.obtenerListados = async () => {
  */
 exports.obtenerListadosByAsignaturaId = async ({ id }) => {
   const listados = await this.obtenerListados();
+
   const listadosFiltrados = listados.filter((listado) => {
     const encontrarAsignatura = listado.calificaciones.find(
       (element) => element.asignatura.toString() === id
@@ -98,7 +100,7 @@ exports.obtenerListadosByAsignaturaId = async ({ id }) => {
     }
     return null;
   });
-  console.log(listadosFiltrados);
+
   const listadosMapeados = listadosFiltrados.map((listado) => {
     // mapeamos las calificaiones para obtener por cada una, asignatura, valor, ausente, fecha, nombreCompleto y alumno (id)
     const listadoMapeado = listado.calificaciones.map((calificacion) => {
@@ -166,19 +168,27 @@ exports.editarListadosById = async ({ listado, id: idListado }) => {
   // editamos las cada calificacion del array
   const promiseEditarCalificaciones = calificaciones.map(
     async (calificacion) => {
-      const { id, valor, ausente } = calificacion;
-      return await calificacionesServices.editarCalificacion({
-        id,
-        reqCalificacion: { valor, ausente, fecha , asignatura },
-      });
+      const { id, valor, ausente, alumno } = calificacion;
+      if(id !== null){
+        return await calificacionesServices.editarCalificacion({
+          id,
+          reqCalificacion: { valor, ausente, fecha , asignatura },
+        });
+      }else{
+        const calificacionNueva = new Calificacion({ alumno, valor, ausente, fecha , asignatura });
+        await calificacionNueva.save();
+        return calificacionNueva
+      }
+      
     }
   );
   // se usa Promise.all para permitir un map asincrono 
   const calificacionesEditadas = await Promise.all(promiseEditarCalificaciones);
   // preparamos el array de id strings
   const arrayCalificacionesId = [];
-  calificacionesEditadas.forEach((calificacion) =>
+  calificacionesEditadas.forEach((calificacion) =>{
     arrayCalificacionesId.push(calificacion.id.toString())
+  }
   );
   // editamos el listado y retornamos
   return await editarListado({ id: idListado, calificaciones: arrayCalificacionesId, fecha, concepto, asignatura });

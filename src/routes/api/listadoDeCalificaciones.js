@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 const listadoDeCalificacionController = require("../../controllers/listadoDecalificacionController");
 const { checkIdValidate } = require("../../middleware/check-id-validate");
+const checkCalificacionesAlumnosExist = require("../../middleware/check-calificaciones-alumnos-exist");
 
 router.get("/", listadoDeCalificacionController.obtenerListados)
 
-router.post("/", listadoDeCalificacionController.crearListadoCalificacion);
+router.post("/", checkCalificacionesAlumnosExist, listadoDeCalificacionController.crearListadoCalificacion);
 
 router.get("/:id", checkIdValidate, listadoDeCalificacionController.obtenerListadoById);
 

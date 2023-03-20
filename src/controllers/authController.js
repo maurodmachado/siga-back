@@ -19,7 +19,7 @@ exports.autenticarUsuario = async (req, res) => {
         let user = await Usuario.findOne({ usuario }).populate({
             path: "autoridad",
             // Get friends of friends - populate the 'friends' array for every friend
-            populate: [{ path: "persona" }, {path: "escuela"}],
+            populate: [{ path: "persona" }, {path: "escuela"}, {path: "tipo"}],
         });
         if (!user) {
             return res.status(400).json({ msg: "El usuario no existe" });

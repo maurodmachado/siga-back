@@ -248,7 +248,6 @@ exports.eliminarCalificacionPorId = async ({ id }) => {
  * @returns { asignatura, valor, ausente, fecha, nombreCompleto, alumno: id}
  */
 exports.mapearCalificaciones = ({ calificacion }) => {
-  console.log(calificacion);
   const { id, asignatura, valor, ausente, fecha, alumno } = calificacion;
   const { id: idAlumno } = alumno;
   const nombreCompleto = `${alumno.persona.apellidos}, ${alumno.persona.nombres}`;
