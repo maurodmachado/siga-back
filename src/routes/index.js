@@ -12,6 +12,12 @@ router.get("/health", (req, res) => {
 router.use("/api/health", (req, res) => {
     return res.status(200).json({ msg: "Server working OK" });   
 })
+router.use("/health", (req, res) => {
+    return res.status(200).json({ msg: "Server working OK" });   
+})
+router.use("/", (req, res) => {
+    return res.status(200).json({ service: "SIGA 2023", version: "1.2.0" });   
+})
 // routes
 router.use("/api/autoridades", require("./api/autoridades"));
 router.use("/api/personas", require("./api/personas"));
