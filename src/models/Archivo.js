@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { formatTime } = require("../utils/utilities");
 
 const ArchivoSchema = mongoose.Schema({
     archivoId: {
@@ -19,11 +20,11 @@ const ArchivoSchema = mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now(),
+        default: formatTime(new Date),
     },
     updatedAt: {
         type: Date,
-        default: Date.now(),
+        default: formatTime(new Date),
     },
 });
 

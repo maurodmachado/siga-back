@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { formatTime } = require("../utils/utilities");
 
 const AsignaturaSchema = mongoose.Schema({
     nombre: {
@@ -14,11 +15,11 @@ const AsignaturaSchema = mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now(),
+        default: formatTime(new Date),
     },
     updatedAt: {
         type: Date,
-        default: Date.now(),
+        default: formatTime(new Date),
     },
 });
 

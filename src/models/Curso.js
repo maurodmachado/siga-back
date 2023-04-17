@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { formatTime } = require('../utils/utilities');
 
 const CursosSchema = mongoose.Schema({
     escuela: {
@@ -31,12 +32,12 @@ const CursosSchema = mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now()
+        default: formatTime(new Date),
     },
     updatedAt: {
         type: Date,
-        default: Date.now()
-    }
+        default: formatTime(new Date),
+    },
 })
 
 module.exports = mongoose.model('Curso', CursosSchema);

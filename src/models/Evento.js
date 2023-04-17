@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { formatTime } = require("../utils/utilities");
 
 const EventoSchema = mongoose.Schema({
     emisor_nombre: {
@@ -38,11 +39,11 @@ const EventoSchema = mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now(),
+        default: formatTime(new Date),
     },
     updatedAt: {
         type: Date,
-        default: Date.now(),
+        default: formatTime(new Date),
     },
 });
 

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { formatTime } = require("../utils/utilities");
 
 const UsuariosSchema = mongoose.Schema({
     usuario: {
@@ -23,11 +24,11 @@ const UsuariosSchema = mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now(),
+        default: formatTime(new Date),
     },
     updatedAt: {
         type: Date,
-        default: Date.now(),
+        default: formatTime(new Date),
     },
 });
 

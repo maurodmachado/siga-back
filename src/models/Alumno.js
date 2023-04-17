@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { formatTime } = require("../utils/utilities");
 
 const AlumnosSchema = mongoose.Schema({
     persona: {
@@ -12,15 +13,11 @@ const AlumnosSchema = mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now(),
+        default: formatTime(new Date),
     },
-    // asistencia: {
-    //     type: Boolean,
-    //     default: false,
-    // },
     updatedAt: {
         type: Date,
-        default: Date.now(),
+        default: formatTime(new Date),
     },
 });
 
