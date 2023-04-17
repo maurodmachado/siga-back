@@ -35,3 +35,7 @@ exports.format = (inputDate) => {
 
   return `${date}/${month}/${year}`;
 }
+
+exports.formatTime = (inputDate) => {
+  return inputDate.getUTCFullYear() +"/"+ (inputDate.getUTCMonth()+1) +"/"+ inputDate.getUTCDate() + " " + inputDate.getUTCHours() + ":" + inputDate.getUTCMinutes() + ":" + inputDate.getUTCSeconds();;
+}

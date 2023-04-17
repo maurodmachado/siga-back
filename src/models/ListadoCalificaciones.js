@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { formatTime } = require('../utils/utilities');
 
 const ListadoCalificacionesSchema = mongoose.Schema({
     calificaciones: [{
@@ -13,11 +14,11 @@ const ListadoCalificacionesSchema = mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now(),
+        default: formatTime(new Date),
     },
     updatedAt: {
         type: Date,
-        default: Date.now(),
+        default: formatTime(new Date),
     },
 });
 

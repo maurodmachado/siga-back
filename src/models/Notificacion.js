@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { format } = require("../utils/utilities");
+const { format, formatTime } = require("../utils/utilities");
 
 const NotificacionSchema = mongoose.Schema({
     alumno: {
@@ -20,11 +20,11 @@ const NotificacionSchema = mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now(),
+        default: formatTime(new Date),
     },
     updatedAt: {
         type: Date,
-        default: Date.now(),
+        default: formatTime(new Date),
     },
 });
 

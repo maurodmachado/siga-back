@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { format } = require('../utils/utilities');
+const { format, formatTime } = require('../utils/utilities');
 
 const InasistenciaSchema = mongoose.Schema({
     alumno: {
@@ -24,11 +24,11 @@ const InasistenciaSchema = mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now()
+        default: formatTime(new Date),
     },
     updatedAt: {
         type: Date,
-        default: Date.now()
+        default: formatTime(new Date),
     },
 })
 
