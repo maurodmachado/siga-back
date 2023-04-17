@@ -27,7 +27,7 @@ exports.autenticarUsuario = async (req, res) => {
 
         const passCorrecto = await bcryptjs.compare(password, user.password);
         if (!passCorrecto) {
-            return res.status(400).json({ msg: "Password incorrecta" });
+            return res.status(400).json({ msg: "Contraseña incorrecta" });
         }
         // HAY QUE PONER ACÁ LO QUE QUEREMOS MANDAR EN EL TOKEN
         const payload = {

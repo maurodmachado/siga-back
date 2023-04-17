@@ -1,6 +1,7 @@
 const Alumno = require("../models/Alumno");
 const { validationResult } = require("express-validator");
 const Inasistencia = require("../models/Inasistencia");
+const { format } = require("../utils/utilities");
 
 exports.crearInasistencia = async (req, res) => {
   const errores = validationResult(req);
@@ -20,7 +21,8 @@ exports.crearInasistencia = async (req, res) => {
       if(estado === null || estado === ""){
         estado = "Injustificada";
       }
-      const today = (new Date).toLocaleDateString('es-AR');
+      const today = format(new Date)
+      console.log(today);
       let inasistExist = await Inasistencia.find({alumno: alumnoId, fecha: today});
       if(inasistExist.length !== 0){
         return res.status(200).json(inasistExist);
