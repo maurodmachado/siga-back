@@ -235,13 +235,6 @@ exports.obtenerLegajoById = async ({ id: legajoId, booleans = false }) => {
                 path: "persona",
             },
         })
-        .populate({
-            path: "tutor",
-            populate: {
-                path: "persona",
-            },
-        });
-
     if (!legajo) {
         throw Error("El legajo no se encuentra en nuestra base de datos.");
     }
@@ -339,7 +332,7 @@ const asignacionBooleanos = ({ object }) => {
     return newObject;
 };
 
-const asignacionBooleanosTutor = ({ cursos, alumnos, _id, persona }) => {
+const asignacionBooleanosTutor = ({ cursos, alumnos, _id, persona, parentezco_tutor }) => {
     return {
         sin_info_persona: !Boolean(persona),
         sin_info_domicilio_laboral: validarDatosLaborales({ object: persona }),
@@ -347,6 +340,7 @@ const asignacionBooleanosTutor = ({ cursos, alumnos, _id, persona }) => {
         alumnos,
         _id,
         persona,
+        parentezco_tutor
     };
 };
 

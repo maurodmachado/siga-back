@@ -13,6 +13,7 @@ module.exports = function AutoridadFactory() {
         cursos,
         alumnos,
         escuelaId,
+        parentezco_tutor
     }) => {
         return await this.createAutoridad({
             personaId,
@@ -20,6 +21,7 @@ module.exports = function AutoridadFactory() {
             alumnos,
             cursos,
             escuelaId,
+            parentezco_tutor
         });
     };
 
@@ -63,6 +65,7 @@ module.exports = function AutoridadFactory() {
         alumnos,
         cursos,
         escuelaId,
+        parentezco_tutor
     }) => {
         const autoridad = await new Autoridad({
             persona: personaId,
@@ -70,6 +73,7 @@ module.exports = function AutoridadFactory() {
             alumnos: alumnos,
             cursos: cursos,
             escuela: escuelaId,
+            parentezco_tutor: parentezco_tutor ?? null
         });
         await autoridad.save();
         return autoridad;

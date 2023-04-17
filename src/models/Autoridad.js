@@ -14,6 +14,9 @@ const AutoridadSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Persona",
     },
+    parentezco_tutor: {
+        type: mongoose.Schema.Types.String
+    },
     cursos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Curso" }],
     alumnos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Alumno" }],
 });

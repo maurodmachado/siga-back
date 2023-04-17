@@ -31,6 +31,7 @@ exports.crearAutoridadLegajo = async ({ reqPersona, alumno }) => {
       personaRelacionada: crearORecuperarPersona._id,
       alumnos: [],
       cursos: [],
+      parentezco_tutor: reqPersona.parentezco_tutor
     });
     // autoridad = await new Autoridad({
     //     tipo: reqPersona.tipoAutoridad,
@@ -128,6 +129,7 @@ exports.crearAutoridad = async ({
   alumnos = [],
   cursos = [],
   escuela, // desde middle
+  parentezco_tutor
 }) => {
   const { tipoAutoridad: tipoAutoridadName } = tipoAutoridadData;
 
@@ -178,6 +180,7 @@ exports.crearAutoridad = async ({
     cursos,
     alumnos,
     escuelaId: escuela ? escuela._id : null,
+    parentezco_tutor
   });
 
   return autoridad;

@@ -20,6 +20,7 @@ class AutoridadHandler {
         cursos,
         alumnos,
         escuelaId,
+        parentezco_tutor
     }) => {
         this.prepareFactoryInstance();
 
@@ -32,6 +33,7 @@ class AutoridadHandler {
                     cursos,
                     alumnos,
                     escuelaId: null,
+                    parentezco_tutor
                 });
                 break;
             case TIPOS_AUTORIDADES.PRECEPTOR:
