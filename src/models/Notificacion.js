@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { format } = require("../utils/utilities");
 
 const NotificacionSchema = mongoose.Schema({
     alumno: {
@@ -7,7 +8,7 @@ const NotificacionSchema = mongoose.Schema({
     },
     fecha:{
         type: String,
-        default: new Date().toLocaleDateString()
+        default: format(new Date)
     },
     leida: {
         type: Boolean,

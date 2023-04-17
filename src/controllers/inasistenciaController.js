@@ -22,7 +22,6 @@ exports.crearInasistencia = async (req, res) => {
         estado = "Injustificada";
       }
       const today = format(new Date)
-      console.log(today);
       let inasistExist = await Inasistencia.find({alumno: alumnoId, fecha: today});
       if(inasistExist.length !== 0){
         return res.status(200).json(inasistExist);
@@ -125,7 +124,7 @@ exports.obtenerInasistenciasByCurso = async (req, res) => {
 
 exports.obtenerInasistenciasDiariasByCurso = async (req, res) => {
   try {
-    const today = (new Date).toLocaleDateString('es-AR');
+    const today = format(new Date)
     let inasistencias = await Inasistencia.find({curso: req.params.id, fecha: today }).populate({
       path: 'alumno',
       populate: { path: 'persona' }
@@ -145,7 +144,7 @@ exports.obtenerInasistenciasDiariasByCurso = async (req, res) => {
 
 exports.obtenerInasistenciasDiariasByAlumno = async (req, res) => {
   try {
-    const today = (new Date).toLocaleDateString('es-AR');
+    const today = format(new Date)
 
     let inasistencias = await Inasistencia.find({alumno: req.params.id, fecha: today }).populate({
       path: 'alumno',

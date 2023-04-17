@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { format } = require('../utils/utilities');
 
 const InasistenciaSchema = mongoose.Schema({
     alumno: {
@@ -11,7 +12,7 @@ const InasistenciaSchema = mongoose.Schema({
     },
     fecha: {
         type: String,
-        default: (new Date).toLocaleDateString()
+        default: format(new Date)
     },
     valor: {
         type: Number,
