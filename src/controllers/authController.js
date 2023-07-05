@@ -119,7 +119,7 @@ exports.forgotPassword = async (req, res) => {
         });
         return res.status(200).json(response);
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return res
             .status(400)
             .json(responseService.crearBadResponse(error.message));

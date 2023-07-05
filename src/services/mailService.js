@@ -168,7 +168,7 @@ exports.sendEmailVerificationLink = async ({
                       "
                       align="center"
                       class="m_-325074366315064794mdv2rw"
-                    ><img src='https://i.postimg.cc/qR2wGsPC/siga-logo.png' border='0' width="100" alt='siga-logo'/>
+                    ><img src='https://i.postimg.cc/qR2wGsPC/siga-logo.png' border='0' width="80" alt='siga-logo'/>
                       <div
                         style="
                           font-family: 'Google Sans', Roboto, RobotoDraft, Helvetica,
@@ -195,7 +195,7 @@ exports.sendEmailVerificationLink = async ({
                           text-align: center;
                         "
                       >
-                      Se registro una solicitud de recuperación de contraseña para el usuario: <b>${user}</b>, porfavor haga click en el siguiente enlace, o peguelo en su navegador para completar el proceso.
+                      Se registro una solicitud de recuperación de contraseña para el usuario: <b>${user}</b>, porfavor haga click en el siguiente enlace, o peguelo en su navegador para completar el proceso.<br/>Una vez ingresado al link, <b>su nueva contraseña será su DNI</b>.
                         <div style="padding-top: 32px; text-align: center">
                           <a
                             href=${verificationLink}

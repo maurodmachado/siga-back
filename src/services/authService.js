@@ -17,10 +17,10 @@ exports.forgotPassword = async ({ username, email }) => {
         populate: [{ path: "persona" }],
     });
     if (!usuario) {
-        throw new Error("Datos incorrectos");
+        throw new Error("Usuario incorrecto");
     }
     if(usuario.autoridad.persona.contactoCorreo !== email){
-        throw new Error("Datos incorrectos");
+        throw new Error("Email incorrecto");
     }
     // generamos token
     const token = jwt.sign(
