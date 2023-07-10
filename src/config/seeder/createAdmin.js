@@ -5,10 +5,10 @@ const bcryptjs = require("bcryptjs");
 const colors = require("colors/safe");
 
 exports.createAdmin = async (escuelaFray, autoridadAdminType) => {
-    console.log(colors.cyan("Persona - Administrador"));
+    console.log(colors.cyan("Persona - Administrativo"));
     
     const personaAdmin = await Persona({
-      nombres: "Administrador",
+      nombres: "Administrativo",
       apellidos: "Siga",
       numeroDocumento: "99999991",
       tipoDocumento: "DNI",
@@ -23,7 +23,7 @@ exports.createAdmin = async (escuelaFray, autoridadAdminType) => {
       domicilioNumeroCalle: null,
       domicilioPiso: null,
       domicilioDepartamento: null,
-      ocupacion: "Administrador",
+      ocupacion: "Administrativo",
       domicilioLaboralLocalidad: null,
       domicilioLaboralCodigoPostal: null, 
       domicilioLaboralBarrio: null,
@@ -33,11 +33,11 @@ exports.createAdmin = async (escuelaFray, autoridadAdminType) => {
       domicilioLaboralDepartamento: null,
       contactoTelefono: "03834896574",
       contactoTelefonoSec: null,
-      contactoCorreo: "administrador@dominio.com"
+      contactoCorreo: "administrativo@dominio.com"
     }).save();
 
     
-  console.log(colors.cyan("Autoridad - Administrador"));
+  console.log(colors.cyan("Autoridad - Administrativo"));
   const autoridadAdmin = await Autoridad({
     tipo: autoridadAdminType._id,
     escuela: escuelaFray._id,
@@ -46,7 +46,7 @@ exports.createAdmin = async (escuelaFray, autoridadAdminType) => {
     cursos: []
   }).save();
 
-    console.log(colors.cyan("Usuario - Administrador"));
+    console.log(colors.cyan("Usuario - Administrativo"));
     const salt = await bcryptjs.genSalt(10);
     await Usuario({
       usuario: "admin",

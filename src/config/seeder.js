@@ -82,7 +82,7 @@ const Usuario = require("../models/Usuario");
 
   console.log(colors.cyan("Tipos de autoridades"));
   const autoridadAdminType = await AutoridadType({
-    tipoAutoridad: "Administrador",
+    tipoAutoridad: "Administrativo",
     permisos: ["superuser"],
   }).save();
 
@@ -220,7 +220,7 @@ const Usuario = require("../models/Usuario");
   }).save();
 
   const personaAdmin = await Persona({
-    nombres: "Administrador",
+    nombres: "Administrativo",
     apellidos: "Siga",
     numeroDocumento: "99999991",
     tipoDocumento: "DNI",
@@ -235,7 +235,7 @@ const Usuario = require("../models/Usuario");
     domicilioNumeroCalle: null,
     domicilioPiso: null,
     domicilioDepartamento: null,
-    ocupacion: "Administrador",
+    ocupacion: "Administrativo",
     domicilioLaboralLocalidad: null,
     domicilioLaboralCodigoPostal: null, 
     domicilioLaboralBarrio: null,
@@ -245,7 +245,7 @@ const Usuario = require("../models/Usuario");
     domicilioLaboralDepartamento: null,
     contactoTelefono: "03834896574",
     contactoTelefonoSec: null,
-    contactoCorreo: "administrador@dominio.com"
+    contactoCorreo: "administrativo@dominio.com"
   }).save();
 
   console.log(colors.cyan("Autoridad - Preceptores"));
@@ -282,7 +282,7 @@ const Usuario = require("../models/Usuario");
     cursos: []
   }).save();
   
-  console.log(colors.cyan("Autoridad - Administrador"));
+  console.log(colors.cyan("Autoridad - Administrativo"));
   const autoridadAdmin = await Autoridad({
     tipo: autoridadAdminType._id,
     escuela: escuelaFray._id,
@@ -1040,7 +1040,7 @@ await Legajo({
     autoridad: autoridadTutor3._id,
   }).save()
 
-  console.log(colors.cyan("Usuario- Administrador"));
+  console.log(colors.cyan("Usuario- Administrativo"));
   await Usuario({
     usuario: "admin",
     password: await bcryptjs.hash("admin", salt),

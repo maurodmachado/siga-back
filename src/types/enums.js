@@ -17,7 +17,7 @@ const nacionalidadPermitidos = {
 };
 
 const tipoAutoridadPermitidos = {
-    values: ["Preceptor", "Profesor", "Tutor", "Administrador"],
+    values: ["Preceptor", "Profesor", "Tutor", "Administrativo"],
     message: "{VALUE} no es un tipo de autoridad permitida",
 };
 

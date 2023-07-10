@@ -78,7 +78,7 @@ const { createTipoAutoridades } = require("./createTipoAutoridades");
     curso2D,
   } = await createCursos(escuelaFray, autoridadPreceptorType);
 
-  // Administrador
+  // Administrativo
 
   await createAdmin(escuelaFray, autoridadAdminType);
 

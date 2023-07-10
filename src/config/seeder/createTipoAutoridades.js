@@ -4,7 +4,7 @@ const colors = require("colors/safe");
 exports.createTipoAutoridades = async () => {
   console.log(colors.cyan("Tipos de autoridades"));
   const autoridadAdminType = await AutoridadType({
-    tipoAutoridad: "Administrador",
+    tipoAutoridad: "Administrativo",
     permisos: ["superuser"],
   }).save();
 
