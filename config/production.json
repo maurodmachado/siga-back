@@ -1,5 +1,5 @@
 {
-    "db_atlas": "mongodb+srv://maurodmachado:root@cluster0.r0rc9.mongodb.net/tesis-prod",
+    "db_atlas": "mongodb+srv://maurodmachado:root@cluster0.heilxzh.mongodb.net/tesis-prod",
     "secret_jwt": "tesis",
     "recovery_path": "/new-password",
     "recovery_server": "https://sigaunca.netlify.app",
