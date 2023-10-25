@@ -4,6 +4,7 @@ const Inasistencia = require("../models/Inasistencia");
 const { format } = require("../utils/utilities");
 
 exports.crearInasistencia = async (req, res) => {
+  console.log(req);
   const errores = validationResult(req);
   if (!errores.isEmpty()) {
     return res.status(400).json({ errores: errores.array() });
